@@ -4,7 +4,7 @@
   "description": "Made with create-react-library",
   "author": "Peteck",
   "license": "MIT",
-  "repository": "venue-pos/react-context-session",
+  "repository": "peteck/react-context-session",
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",

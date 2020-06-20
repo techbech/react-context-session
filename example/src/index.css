@@ -1,14 +1,103 @@
 body {
   margin: 0;
-  padding: 0;
+  padding: 40px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #f2e8cf;
+  color: #386641;
+}
+
+h1 {
+  font-size: 50px;
+  color: #d2c5a3;
+}
+
+h1, h2 {
+  text-align: center;
+}
+
+h2, h3 {
+  color: #6a994e;
+}
+
+h2 {
+  text-transform: uppercase;
+  font-size: 32px;
+}
+
+h3 {
+  font-size: 26px;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.container {
+  flex-direction: row;
+  display: flex;
+}
+
+.context {
+  flex: 0.5;
+}
+
+.card {
+  margin: 0 40px 40px;
+  padding: 20px 30px;
+  background: #fbf5e3;
+  border-radius: 8px;
+}
+
+.mount-dismount {
+  text-align: center;
+  padding-top: 30px;
+}
+
+button {
+  background-color: #bc4749;
+  border: 0;
+  padding: 12px 30px;
+  border-radius: 8px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+.states {
+  flex: 1;
+}
+
+.states p {
+  line-height: 43px;
+  margin: 0;
+}
+
+.states p span {
+  margin-right: 20px;
+  font-weight: bold;
+}
+
+.states p span:after {
+  content: ":";
+}
+
+.buttons {
+  flex: 0;
+}
+
+.buttons button{
+  margin: 2px 0;
 }
