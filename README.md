@@ -3,7 +3,7 @@
 
 react-context-session is designed to minimize the number of rerenders, but still offer an elegant API that make development easy and fast.
 With one generic `useSession` hook, and one context provider `<ProvideSession />`, you will be up and ready to go, using your own session data structure.
-The dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering,
+The session state dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering,
 
 ## Install
 
