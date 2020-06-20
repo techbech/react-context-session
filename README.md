@@ -3,7 +3,7 @@
 
 react-context-session is designed to minimize the number of rerenders, but still offer an elegant API that make development easy and fast.
 With one generic `useSession` hook, and one context provider `<ProvideSession />`, you will be up and ready to go, using your own session data structure.
-The session state dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering,
+The session state dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering.
 
 ## Install
 
@@ -15,49 +15,54 @@ npm install --save @peteck/react-context-session
 
 ```tsx
 import React from "react";
-import {ProvideSession, useSession} from "react-context-session";
+import { ProvideSession, useSession } from "react-context-session";
 
-// Arbitrary session data structure
 type MySessionType = {
-  x: number;
-  y: number;
-  z: string;
-}
+    x: number;
+    y: number;
+    z: string;
+};
 
 // Create type strict hook alias
 const useMySession = useSession<MySessionType>();
 
 // Read usage
 function MyCalculation() {
-  const [{x,y}] = useMySession(["x", "y"]); // Request the needed data properties
+    const [{ x, y }] = useMySession(["x", "y"]);
 
-  return <p>{x} + {y} = {x + y}</p>;
+    return (
+        <p>
+            {x} + {y} = {x + y}
+        </p>
+    );
 }
 
 // Read usage
 function MyMessage() {
-  const [{z}] = useMySession(["z"]);
+    const [{ z }] = useMySession(["z"]);
 
-  return <p>{z}</p>;
+    return <p>{z}</p>;
 }
 
 // Write usage
 function MyButton() {
-  const [, setValue] = useMySession();
-  return <button onClick={() => setValue("z", "My new string")}>Click me</button>;
+    const [, setValue] = useMySession();
+    return (
+        <button onClick={() => setValue("z", "My new string")}>Click me</button>
+    );
 }
 
 // Setup session in the root of your application, or at least higher in
 // the component hierarchy than the component using the `useSession` hook.
 // * Mandatory: Set default session values in the data prop
 function MyApp() {
-  return (
-    <ProvideSession data={{x: 5, y: 10, z: "My string"}}>
-      <MyCalculation />
-      <MyMessage />
-      <MyButton />
-    </ProvideSession>
-  )
+    return (
+        <ProvideSession data={{ x: 5, y: 10, z: "My string" }}>
+            <MyCalculation />
+            <MyMessage />
+            <MyButton />
+        </ProvideSession>
+    );
 }
 ```
 
@@ -82,39 +87,44 @@ react-context-session has no support for saving to storage, but do instead have 
 Please notice that multiple contexts is still supported with this feature, and the callback only calls with updated data to its context.
 Here is an example how one could implement storage with with [react-native-community/async-storage](https://github.com/react-native-community/async-storage)
 ```tsx
-function MyProvider() {
-  const [defaultData, setDefaultData] = useState<MySessionType>()
-  useEffect(() => {
-    AsyncStorage.getItem('session').then(value => {
-      if (value !== null) {
-        setDefaultData(JSON.parse(value) as MySessionType)
-      } else {
-        // If no session data was found in storage, we still need to give an default data set
-        setDefaultData({
-          x: 5,
-          y: 5,
-          z: 'My String'
-        })
-      }
-    });
-  }, [])
+type MySessionType = {
+    x: number;
+    y: number;
+    z: string;
+};
 
-  if (!defaultData) {
-    return <p>Loading session data, please wait..</p>
-  } else {
-    return (
-      <ProvideSession
-        data={defaultData}
-        context={"my-context"}
-        onChange={async (data) => {
-          const jsonValue = JSON.stringify(data)
-          await AsyncStorage.setItem('session', jsonValue)
-        }}
-      >
-        ...
-      </ProvideSession>
-    )
-  }
+function MyProvider() {
+    const [defaultData, setDefaultData] = useState<MySessionType>();
+    useEffect(() => {
+        AsyncStorage.getItem("session").then((value) => {
+            if (value !== null) {
+                setDefaultData(JSON.parse(value) as MySessionType);
+            } else {
+                // If no session data was found in storage, we still need to give an default data set
+                setDefaultData({
+                    x: 5,
+                    y: 5,
+                    z: "My String",
+                });
+            }
+        });
+    }, []);
+
+    if (!defaultData) {
+        return <p>Loading session data, please wait..</p>;
+    } else {
+        return (
+            <ProvideSession
+                data={defaultData}
+                context={"my-context"}
+                onChange={async (data) => {
+                    const jsonValue = JSON.stringify(data);
+                    await AsyncStorage.setItem("session", jsonValue);
+                }}>
+                ...
+            </ProvideSession>
+        );
+    }
 }
 ```
 
