@@ -9,7 +9,8 @@ import {
 import {
   SessionContextKey,
   SessionGenericContext,
-  SessionGenericData, SessionOnChange
+  SessionGenericData,
+  SessionOnChange
 } from './types'
 import { SessionContext } from './provider'
 export { ProvideSession } from './provider'
@@ -28,7 +29,10 @@ export function initializeSession(
 
 export function useSession<DataType>(): <S extends keyof DataType>(
   dependencies?: S[]
-) => [{ [K in S]: DataType[K] }, <P extends keyof DataType>(key: P, value: DataType[P]) => void] {
+) => [
+  { [K in S]: DataType[K] },
+  <P extends keyof DataType>(key: P, value: DataType[P]) => void
+] {
   return useSessionBase
 }
 
@@ -37,7 +41,10 @@ export function useSessionBase<
   S extends keyof DataType = keyof DataType
 >(
   dependencies?: S[]
-): [{ [K in S]: DataType[K] }, <P extends keyof DataType>(key: P, value: DataType[P]) => void] {
+): [
+  { [K in S]: DataType[K] },
+  <P extends keyof DataType>(key: P, value: DataType[P]) => void
+] {
   const context = sessionContexts[useContext<string>(SessionContext)]
   if (typeof context === 'undefined' || typeof context.data === 'undefined') {
     throw new Error(
@@ -45,7 +52,7 @@ export function useSessionBase<
     )
   }
 
-  const k = dependencies || [];
+  const k = dependencies || []
   const states: {
     [key: string]: [any, Dispatch<SetStateAction<any>>]
   } = {}
@@ -81,17 +88,17 @@ export function useSessionBase<
   const set = useCallback(
     (key, value) => {
       if (!context.data) {
-        return;
+        return
       }
 
       context.data[key] = value
 
       if (context.onChange) {
-        context.onChange(context.data);
+        context.onChange(context.data)
       }
 
-      if(!context.dispatcher[key]) {
-        return;
+      if (!context.dispatcher[key]) {
+        return
       }
 
       for (let i = 0; i < context.dispatcher[key].length; i++) {

@@ -48,7 +48,8 @@ export function Child({ property }: { property: keyof Test }) {
         Last <u>render</u> at: {new Date().getTime()}
       </p>
       <p className={'last-effect'}>
-        Last <u>effect</u> on <b>{property.toUpperCase()}</b> at: {updatedAt.getTime()}
+        Last <u>effect</u> on <b>{property.toUpperCase()}</b> at:{' '}
+        {updatedAt.getTime()}
       </p>
       <div className={'row'}>
         <div className={'states'}>

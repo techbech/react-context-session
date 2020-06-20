@@ -8,12 +8,12 @@ export function ProvideSession({
   children,
   context,
   data,
-  onChange,
+  onChange
 }: {
-  children: ReactNode;
-  context?: string;
-  data: SessionGenericData;
-  onChange?: (data: any) => void;
+  children: ReactNode
+  context?: string
+  data: SessionGenericData
+  onChange?: (data: any) => void
 }) {
   initializeSession(context || 'default', data, onChange)
   return (
