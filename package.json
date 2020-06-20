@@ -1,10 +1,13 @@
 {
-  "name": "react-context-session",
+  "name": "@peteck/react-context-session",
   "version": "1.0.0",
-  "description": "Made with create-react-library",
+  "description": "Arbitrary session data with support for multiple contexts",
   "author": "Peteck",
   "license": "MIT",
-  "repository": "peteck/react-context-session",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peteck/react-context-session.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.tsx",
