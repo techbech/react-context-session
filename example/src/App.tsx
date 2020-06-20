@@ -45,7 +45,10 @@ export function Child({ property }: { property: keyof Test }) {
     <div className={'card'}>
       <h3>{`Child (${property.toUpperCase()})`}</h3>
       <p className={'last-render'}>
-        Last <u>effect</u> at: {updatedAt.getTime()}
+        Last <u>render</u> at: {new Date().getTime()}
+      </p>
+      <p className={'last-effect'}>
+        Last <u>effect</u> on <b>{property.toUpperCase()}</b> at: {updatedAt.getTime()}
       </p>
       <div className={'row'}>
         <div className={'states'}>
@@ -76,6 +79,9 @@ export function Parent() {
     <div className={'parent'}>
       <div className={'card'}>
         <h3>Parent</h3>
+        <p className={'last-render'}>
+          Last <u>render</u> at: {new Date().getTime()}
+        </p>
         <div className={'row'}>
           <div className={'states'}>
             <p>
@@ -139,9 +145,6 @@ const App = () => {
   return (
     <div>
       <h1>react-context-session</h1>
-      <p className={'sub-headline'}>
-        Multiple session contexts, render optimized and type strict
-      </p>
       <div className={'container'}>
         <div className={'context'}>
           <ProvideSession
