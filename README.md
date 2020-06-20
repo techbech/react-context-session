@@ -1,5 +1,5 @@
 # react-context-session
-[![NPM](https://img.shields.io/npm/v/react-context-session.svg)](https://www.npmjs.com/package/react-context-session) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/@peteck/react-context-session.svg)](https://www.npmjs.com/package/@peteck/react-context-session) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
