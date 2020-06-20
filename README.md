@@ -4,7 +4,7 @@
 ## Install
 
 ```bash
-npm install --save react-context-session
+npm install --save @peteck/react-context-session
 ```
 
 ## Getting started
