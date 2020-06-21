@@ -35,6 +35,9 @@ h3 {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+  text-align: center;
+  width: 100%;
+  display: block;
 }
 
 .container {

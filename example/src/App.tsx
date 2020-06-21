@@ -141,6 +141,13 @@ const App = () => {
     return (
         <div>
             <h1>react-context-session</h1>
+            <code className={"code"}>
+              {`type MySessionData = {
+              a: number;
+              b: number;
+              c: number;
+            };`}
+            </code>
             <div className={"container"}>
                 <div className={"context"}>
                     <ProvideSession
@@ -149,7 +156,7 @@ const App = () => {
                         onChange={(data) => {
                             console.log("Save to storage", data);
                         }}>
-                        <h2>App</h2>
+                        <h2><u>App</u> context</h2>
                         <Parent />
                         <Observer />
                     </ProvideSession>
@@ -158,7 +165,7 @@ const App = () => {
                     <ProvideSession
                         data={{ a: 0, b: 0, c: 0 }}
                         context={"admin"}>
-                        <h2>Admin</h2>
+                        <h2><u>Admin</u> context</h2>
                         <Parent />
                         <Observer />
                     </ProvideSession>

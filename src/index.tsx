@@ -48,7 +48,7 @@ export function useSessionBase<
     const context = sessionContexts[useContext<string>(SessionContext)];
     if (typeof context === "undefined" || typeof context.data === "undefined") {
         throw new Error(
-            `Call "initializeSession({...defaultValues})" before using "useSession(...)".`,
+            `"useSession" is called outside a session context. Make sure to wrap your component with a "<ProvideSession data={...} />"`,
         );
     }
 
@@ -91,7 +91,6 @@ export function useSessionBase<
                 }
             }
         };
-        // eslint-disable-next-line
     }, []);
 
     const set = useCallback(
