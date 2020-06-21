@@ -41,7 +41,7 @@ function MyButton() {
 // * Mandatory: Set default session values in the data prop
 function MyApp() {
     return (
-        <ProvideSession data={{ x: 5, y: 10, z: "My string" }}>
+        <ProvideSession<MySessionType> data={{ x: 5, y: 10, z: "My string" }}>
             <MyCalculation />
             <MyMessage />
             <MyButton />

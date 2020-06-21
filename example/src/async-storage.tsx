@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { ProvideSession } from "../../src";
 import AsyncStorage from "@react-native-community/async-storage";
 
-type MySessionType = {
+type MySessionData = {
     x: number;
     y: number;
     z: string;
 };
 
 export function MyProvider() {
-    const [defaultData, setDefaultData] = useState<MySessionType>();
+    const [defaultData, setDefaultData] = useState<MySessionData>();
     useEffect(() => {
         AsyncStorage.getItem("session").then((value) => {
             if (value !== null) {
-                setDefaultData(JSON.parse(value) as MySessionType);
+                setDefaultData(JSON.parse(value) as MySessionData);
             } else {
                 // If no session data was found in storage, we still need to give an default data set
                 setDefaultData({

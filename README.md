@@ -1,7 +1,7 @@
 # react-context-session
 [![NPM](https://img.shields.io/npm/v/@peteck/react-context-session.svg)](https://www.npmjs.com/package/@peteck/react-context-session) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-react-context-session is designed to minimize the number of rerenders, but still offer an elegant API that make development easy and fast.
+react-context-session is designed to minimize the number of rerenders, but still offer an elegant type-strict API that make development easy and fast.
 With one generic `useSession` hook, and one context provider `<ProvideSession />`, you will be up and ready to go, using your own session data structure.
 The session state dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering.
 
@@ -57,7 +57,7 @@ function MyButton() {
 // * Mandatory: Set default session values in the data prop
 function MyApp() {
     return (
-        <ProvideSession data={{ x: 5, y: 10, z: "My string" }}>
+        <ProvideSession <MySessionType> data={{ x: 5, y: 10, z: "My string" }}>
             <MyCalculation />
             <MyMessage />
             <MyButton />
@@ -71,14 +71,14 @@ If your app has different sections where the session data should to be shared be
 for each section as following.
 ```tsx
 function AdminSection() {
-  return (
-    <ProvideSession data={...} context={"admin"}>...</ProvideSession>
-  )
+    return (
+        <ProvideSession <MySessionType> data={...} context={"admin"}>...</ProvideSession>
+    )
 }
 function UserSection() {
-  return (
-    <ProvideSession data={...} context={"user"}>...</ProvideSession>
-  )
+    return (
+        <ProvideSession <MySessionType> data={...} context={"user"}>...</ProvideSession>
+    )
 }
 ```
 
@@ -94,11 +94,11 @@ type MySessionType = {
 };
 
 function MyProvider() {
-    const [defaultData, setDefaultData] = useState<MySessionType>();
+    const [defaultData, setDefaultData] = useState<MySessionData>();
     useEffect(() => {
         AsyncStorage.getItem("session").then((value) => {
             if (value !== null) {
-                setDefaultData(JSON.parse(value) as MySessionType);
+                setDefaultData(JSON.parse(value) as MySessionData);
             } else {
                 // If no session data was found in storage, we still need to give an default data set
                 setDefaultData({

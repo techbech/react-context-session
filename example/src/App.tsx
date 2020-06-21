@@ -137,12 +137,12 @@ export function Parent() {
     );
 }
 
-const App = () => {
+export function App() {
     return (
         <div>
             <h1>react-context-session</h1>
             <code className={"code"}>
-              {`type MySessionData = {
+                {`type MySessionData = {
               a: number;
               b: number;
               c: number;
@@ -150,22 +150,26 @@ const App = () => {
             </code>
             <div className={"container"}>
                 <div className={"context"}>
-                    <ProvideSession
+                    <ProvideSession<Test>
                         data={{ a: 0, b: 0, c: 0 }}
                         context={"app"}
-                        onChange={(data) => {
+                        onChange={async (data) => {
                             console.log("Save to storage", data);
                         }}>
-                        <h2><u>App</u> context</h2>
+                        <h2>
+                            <u>App</u> context
+                        </h2>
                         <Parent />
                         <Observer />
                     </ProvideSession>
                 </div>
                 <div className={"context"}>
-                    <ProvideSession
+                    <ProvideSession<Test>
                         data={{ a: 0, b: 0, c: 0 }}
                         context={"admin"}>
-                        <h2><u>Admin</u> context</h2>
+                        <h2>
+                            <u>Admin</u> context
+                        </h2>
                         <Parent />
                         <Observer />
                     </ProvideSession>
@@ -173,6 +177,8 @@ const App = () => {
             </div>
         </div>
     );
-};
+}
 
-export default App;
+export function WithoutProvider() {
+    return <Observer />;
+}
