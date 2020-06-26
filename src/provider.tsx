@@ -1,4 +1,10 @@
-import React, { createContext, ReactNode, useContext, useEffect } from "react";
+import React, {
+    createContext,
+    ReactNode,
+    useContext,
+    useEffect,
+    useState,
+} from "react";
 import {
     SessionContextKey,
     SessionGenericContext,
@@ -6,11 +12,14 @@ import {
     SessionOnChange,
 } from "./types";
 import { Dispatcher } from "./dispatcher";
+import cloneDeep from "lodash.clonedeep";
 
 const ReactSessionContext = createContext<SessionContextKey>("default");
-let sessionContexts: {
+
+type SessionContexts = {
     [key: string]: SessionGenericContext | undefined;
-} = {};
+};
+const sessionContexts: SessionContexts = {};
 
 export function useSessionContext<DataType extends SessionGenericData>() {
     return sessionContexts[useContext<string>(ReactSessionContext)] as
@@ -18,50 +27,71 @@ export function useSessionContext<DataType extends SessionGenericData>() {
         | undefined;
 }
 
+export function getSessionContexts() {
+    const data = {};
+    for (const i in sessionContexts) {
+        data[i] = cloneDeep(sessionContexts);
+    }
+    return data;
+}
+
+export function hasSessionContext(contextKey: string) {
+    return !!sessionContexts[contextKey];
+}
+
 function initializeSession(
     contextKey: SessionContextKey,
     data: SessionGenericData,
     onChange?: SessionOnChange<SessionGenericData>,
 ) {
-    if (!sessionContexts[contextKey]) {
-        // Deep clone data to get rid of references to data argument
-        const cloneData = JSON.parse(JSON.stringify(data));
-
+    if (!hasSessionContext(contextKey)) {
         sessionContexts[contextKey] = {
-            data: cloneData,
+            data: cloneDeep(data),
             dispatcher: new Dispatcher<SessionGenericData>(),
             onChange,
         };
     }
 }
 
-export function clearSessionContexts() {
-    sessionContexts = {};
+function clearSessionContext(contextKey: string) {
+    delete sessionContexts[contextKey];
+}
+
+function getUniqueContextName() {
+    return `default-${Date.now()}-${Math.floor(Math.random() * 999999)}`;
 }
 
 export function ProvideSession<DataType extends SessionGenericData>({
     children,
-    context,
+    name,
     data,
     onChange,
+    keepOnUnmount,
 }: {
     children: ReactNode;
-    context?: string;
+    name?: string;
     data: DataType;
     onChange?: SessionOnChange<DataType>;
+    keepOnUnmount?: boolean;
 }) {
+    const [contextKey] = useState<string>(name || getUniqueContextName);
+
     initializeSession(
-        context || "default",
+        contextKey,
         data,
         onChange as SessionOnChange<SessionGenericData>,
     );
 
     useEffect(() => {
-        return clearSessionContexts;
-    }, []);
+        return () => {
+            if (!keepOnUnmount) {
+                clearSessionContext(contextKey);
+            }
+        };
+    });
 
     return (
-        <ReactSessionContext.Provider value={context || "default"}>
+        <ReactSessionContext.Provider value={contextKey}>
             {children}
         </ReactSessionContext.Provider>
     );

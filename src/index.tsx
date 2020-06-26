@@ -1,2 +1,6 @@
-export { ProvideSession } from "./provider";
+export {
+    ProvideSession,
+    getSessionContexts,
+    hasSessionContext,
+} from "./provider";
 export { useSession } from "./use-session";

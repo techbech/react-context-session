@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 
 import { useSession, ProvideSession } from "react-context-session";
-import "react-context-session/dist/index.css";
 
 type Test = {
     a: number;
@@ -152,7 +151,7 @@ export function App() {
                 <div className={"context"}>
                     <ProvideSession<Test>
                         data={{ a: 0, b: 0, c: 0 }}
-                        context={"app"}
+                        name={"app"}
                         onChange={async (data) => {
                             console.log("Save to storage", data);
                         }}>
@@ -166,7 +165,7 @@ export function App() {
                 <div className={"context"}>
                     <ProvideSession<Test>
                         data={{ a: 0, b: 0, c: 0 }}
-                        context={"admin"}>
+                        name={"admin"}>
                         <h2>
                             <u>Admin</u> context
                         </h2>

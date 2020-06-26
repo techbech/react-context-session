@@ -72,21 +72,38 @@ for each section as following.
 ```tsx
 function AdminSection() {
     return (
-        <ProvideSession <MySessionType> data={...} context={"admin"}>...</ProvideSession>
+        // Optional name for the context can be set with the "name" property
+        // ... for easier access for it's data with `getSessionContexts()`
+        // If no name is given, react-context-session will set an arbitrary name
+        <ProvideSession <MySessionType> data={...} name={"admin"}>...</ProvideSession>
     )
 }
 function UserSection() {
     return (
-        <ProvideSession <MySessionType> data={...} context={"user"}>...</ProvideSession>
+        <ProvideSession <MySessionType> data={...} name={"user"}>...</ProvideSession>
     )
 }
 ```
 
+To keep the session data for a context between mount and dismount of the `<ProvideSession />` component, one could set a name for the context and add the `keepOnUnmount` property.
+
+```
+function UserSection() {
+    return (
+        <ProvideSession <MySessionType> data={...} context={"user"} keepOnUnmount>...</ProvideSession>
+    )
+}
+```
 ## Save session data to storage
-react-context-session has no support for saving to storage, but do instead have a callback function for every time the data changes.
-Please notice that multiple contexts is still supported with this feature, and the callback only calls with updated data to its context.
-Here is an example how one could implement storage with with [react-native-community/async-storage](https://github.com/react-native-community/async-storage)
+react-context-session has no built-in support for saving to storage, but do instead have a callback for every time the data changes, and also has a global method to fetch the current contexts' data.
+Please notice that multiple contexts is still supported with this feature, and the callback only calls with updated data to its own context.
+
+##### On session data change [React Native]
+This example shows how one could implement session persistence with [react-native-community/async-storage](https://github.com/react-native-community/async-storage).
+It will load saved session data from storage and put it into a context, and update the storage on any changes to the session data on that same context.
 ```tsx
+import AsyncStorage from "@react-native-community/async-storage";
+
 type MySessionType = {
     x: number;
     y: number;
@@ -96,7 +113,7 @@ type MySessionType = {
 function MyProvider() {
     const [defaultData, setDefaultData] = useState<MySessionData>();
     useEffect(() => {
-        AsyncStorage.getItem("session").then((value) => {
+        AsyncStorage.getItem("my-session").then((value) => {
             if (value !== null) {
                 setDefaultData(JSON.parse(value) as MySessionData);
             } else {
@@ -116,15 +133,45 @@ function MyProvider() {
         return (
             <ProvideSession
                 data={defaultData}
-                context={"my-context"}
+                name={"my-session-context"}
                 onChange={async (data) => {
                     const jsonValue = JSON.stringify(data);
-                    await AsyncStorage.setItem("session", jsonValue);
+                    await AsyncStorage.setItem("my-session", jsonValue);
                 }}>
                 ...
             </ProvideSession>
         );
     }
+}
+```
+
+##### On app state change [React Native]
+Saving the session data to storage, every time it changes, can be rather expensive and could be avoided by listening to [app state changes](https://reactnative.dev/docs/appstate.html) such as: `active | inactive | background`.
+Notice this doesn't guarantee the data will be saved if the app crashes.
+This example shows how one would save to async storage whenever the app state changes with help from: `getSessionContexts()`
+```tsx
+import { ProvideSession, getSessionContexts } from "react-context-session";
+import { AppState } from "react-native";
+
+function MyProvider() {
+    const [defaultData, setDefaultData] = useState<MySessionData>();
+
+    const handleAppStateChange = useCallback(async () => {
+        const contexts = getSessionContexts();
+        for (const contextKey in contexts) {
+            AsyncStorage.setItem(contextKey, JSON.stringify(contexts));
+        }
+    }, []);
+
+    useEffect(() => {
+        AppState.addEventListener("change", handleAppStateChange);
+
+        return () => {
+          AppState.removeEventListener("change", handleAppStateChange);
+        };
+    }, [handleAppStateChange]);
+
+    // ... see above example on how to load from storage
 }
 ```
 

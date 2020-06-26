@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { render } from "react-dom";
+import { render, unmountComponentAtNode } from "react-dom";
 import { act } from "react-dom/test-utils";
 import { useSession as useSessionImpl } from "./use-session";
-import { clearSessionContexts, ProvideSession } from "./provider";
+import { ProvideSession, hasSessionContext } from "./provider";
 
 let container: any;
 
@@ -12,9 +12,9 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+    unmountComponentAtNode(container);
     document.body.removeChild(container);
     container = null;
-    clearSessionContexts();
 });
 
 type SessionData = {
@@ -82,9 +82,18 @@ function ObserverComponent() {
 }
 
 const defaultData: SessionData = { a: 5, b: 10, c: "0" };
-function TestApp() {
+function TestApp({
+    keepOnUnmount,
+    context,
+}: {
+    keepOnUnmount?: boolean;
+    context?: string;
+}) {
     return (
-        <ProvideSession data={defaultData}>
+        <ProvideSession
+            data={defaultData}
+            keepOnUnmount={keepOnUnmount}
+            name={context}>
             <TestComponent1 />
             <TestComponent3 />
             <ObserverComponent />
@@ -161,4 +170,24 @@ it("can mount and dismount", () => {
     });
 
     testData(defaultData.a, defaultData.b, "TEST");
+});
+
+it("will clear context on dismount", () => {
+    act(() => {
+        render(<TestApp context="TEST-CONTEXT" />, container);
+    });
+
+    unmountComponentAtNode(container);
+
+    expect(hasSessionContext("TEST-CONTEXT")).toBe(false);
+});
+
+it("can keep context on dismount", () => {
+    act(() => {
+        render(<TestApp context="TEST-CONTEXT" keepOnUnmount />, container);
+    });
+
+    unmountComponentAtNode(container);
+
+    expect(hasSessionContext("TEST-CONTEXT")).toBe(true);
 });

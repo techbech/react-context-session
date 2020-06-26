@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { ProvideSession } from "../../src";
+import React, { useEffect, useState, useCallback } from "react";
+import { ProvideSession, getSessionContexts } from "../../src";
 import AsyncStorage from "@react-native-community/async-storage";
+//import { AppState } from "react-native";
 
 type MySessionData = {
     x: number;
@@ -31,7 +32,7 @@ export function MyProvider() {
         return (
             <ProvideSession
                 data={defaultData}
-                context={"my-context"}
+                name={"my-context"}
                 onChange={async (data) => {
                     const jsonValue = JSON.stringify(data);
                     await AsyncStorage.setItem("session", jsonValue);
@@ -40,4 +41,23 @@ export function MyProvider() {
             </ProvideSession>
         );
     }
+}
+
+export function MyProviderAppState() {
+    const handleAppStateChange = useCallback(async () => {
+        const contexts = getSessionContexts();
+        for (const contextKey in contexts) {
+            AsyncStorage.setItem(contextKey, JSON.stringify(contexts));
+        }
+    }, []);
+
+    useEffect(() => {
+        //AppState.addEventListener("change", handleAppStateChange);
+
+        return () => {
+            //AppState.removeEventListener("change", handleAppStateChange);
+        };
+    }, [handleAppStateChange]);
+
+    // ... see above example how to load from storage
 }
