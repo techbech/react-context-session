@@ -10,6 +10,7 @@
     },
     "main": "dist/index.js",
     "module": "dist/index.modern.js",
+    "typings": "dist/index.d.ts",
     "source": "src/index.tsx",
     "engines": {
         "node": ">=10"
