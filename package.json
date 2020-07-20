@@ -1,6 +1,6 @@
 {
     "name": "@peteck/react-context-session",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Arbitrary session data with support for multiple contexts",
     "author": "Peteck",
     "license": "MIT",
