@@ -66,12 +66,6 @@ export function useSessionBase<
 
     const set = useCallback(
         <P extends keyof DataType>(key: P, value: DataType[P]) => {
-            if (typeof context.data[key] === "undefined") {
-                throw new Error(
-                    `"${key}" is not defined in the default session values. Make sure it's present and try again.`,
-                );
-            }
-
             context.data[key] = value;
 
             if (context.onChange) {

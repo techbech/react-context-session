@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
 import { Dispatcher } from "./dispatcher";
 
-export type SessionValueType = {} | null;
+export type SessionValueType = {} | null | undefined;
 export type SessionGenericData = { [key: string]: SessionValueType };
 export type SessionDispatchFunc = Dispatch<SetStateAction<any>>;
 export type SessionContextKey = string;

@@ -129,10 +129,6 @@ function useSessionBase(dependencies) {
     };
   }, []);
   var set = useCallback(function (key, value) {
-    if (typeof context.data[key] === "undefined") {
-      throw new Error("\"" + key + "\" is not defined in the default session values. Make sure it's present and try again.");
-    }
-
     context.data[key] = value;
 
     if (context.onChange) {

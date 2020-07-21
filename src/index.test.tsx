@@ -21,6 +21,7 @@ type SessionData = {
     a: number;
     b: number;
     c: string;
+    d?: boolean;
 };
 
 const useSession = useSessionImpl<SessionData>();
@@ -49,12 +50,19 @@ function TestComponent1() {
 }
 
 function TestComponent2() {
-    const [{ c }, set] = useSession(["c"]);
+    const [{ c, d }, set] = useSession(["c", "d"]);
 
     return (
         <div>
             <p id="c">{c}</p>
-            <button id="btn2" onClick={() => set("c", String(Number(c) + 1))} />
+            <p id="d">{d === true ? "true" : "false"}</p>
+            <button
+                id="btn2"
+                onClick={() => {
+                    set("c", String(Number(c) + 1));
+                    set("d", true);
+                }}
+            />
         </div>
     );
 }
@@ -64,19 +72,26 @@ function TestComponent3() {
 
     return (
         <div>
-            <button id="btn3" onClick={() => set("c", "TEST")} />
+            <button
+                id="btn3"
+                onClick={() => {
+                    set("c", "TEST");
+                    set("d", undefined);
+                }}
+            />
         </div>
     );
 }
 
 function ObserverComponent() {
-    const [{ a, b, c }] = useSession(["b", "c", "a"]);
+    const [{ a, b, c, d }] = useSession(["b", "c", "a", "d"]);
 
     return (
         <div>
             <span id="o-a">{a}</span>
             <span id="o-b">{b}</span>
             <span id="o-c">{c}</span>
+            <span id="o-d">{typeof d}</span>
         </div>
     );
 }
@@ -101,14 +116,18 @@ function TestApp({
     );
 }
 
-function testData(a: number, b: number, c: string) {
+function testData(a: number, b: number, c: string, d?: boolean) {
     expect(Number(container.querySelector("#a").innerHTML)).toBe(a);
     expect(Number(container.querySelector("#b").innerHTML)).toBe(b);
     expect(container.querySelector("#c").innerHTML).toBe(c);
+    expect(container.querySelector("#d").innerHTML).toBe(
+        d === true ? "true" : "false",
+    );
 
     expect(Number(container.querySelector("#o-a").innerHTML)).toBe(a);
     expect(Number(container.querySelector("#o-b").innerHTML)).toBe(b);
     expect(container.querySelector("#o-c").innerHTML).toBe(c);
+    expect(container.querySelector("#o-d").innerHTML).toBe(typeof d);
 }
 
 it("can not use useSession hook without session provider", () => {
@@ -120,7 +139,7 @@ it("data has the correct default values", () => {
     act(() => {
         render(<TestApp />, container);
     });
-    testData(defaultData.a, defaultData.b, defaultData.c);
+    testData(defaultData.a, defaultData.b, defaultData.c, defaultData.d);
 });
 
 it("can set session values", () => {
@@ -140,13 +159,14 @@ it("can set session values", () => {
         defaultData.a + 1,
         defaultData.b + 1,
         String(Number(defaultData.c) + 1),
+        true,
     );
 
     act(() => {
         btn3.dispatchEvent(new MouseEvent("click", { bubbles: true }));
     });
 
-    testData(defaultData.a + 1, defaultData.b + 1, "TEST");
+    testData(defaultData.a + 1, defaultData.b + 1, "TEST", defaultData.d);
 });
 
 it("can mount and dismount", () => {

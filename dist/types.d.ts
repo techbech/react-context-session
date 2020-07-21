@@ -1,6 +1,6 @@
 import { Dispatch, SetStateAction } from "react";
 import { Dispatcher } from "./dispatcher";
-export declare type SessionValueType = {} | null;
+export declare type SessionValueType = {} | null | undefined;
 export declare type SessionGenericData = {
     [key: string]: SessionValueType;
 };
