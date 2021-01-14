@@ -118,11 +118,23 @@ function useSessionBase(dependencies) {
   }
 
   useEffect(function () {
+    var didUnmount = false;
+
+    var _loop = function _loop(_i) {
+      context.dispatcher.register(k[_i], function (value) {
+        if (!didUnmount) {
+          states[k[_i]][1](value);
+        }
+      });
+    };
+
     for (var _i = 0; _i < k.length; _i++) {
-      context.dispatcher.register(k[_i], states[k[_i]][1]);
+      _loop(_i);
     }
 
     return function () {
+      didUnmount = true;
+
       for (var _i2 = 0; _i2 < k.length; _i2++) {
         context.dispatcher.unregister(k[_i2], states[k[_i2]][1]);
       }

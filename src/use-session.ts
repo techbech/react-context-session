@@ -47,14 +47,19 @@ export function useSessionBase<
     }
 
     useEffect(() => {
+        let didUnmount = false;
+
         for (let i = 0; i < k.length; i++) {
-            context.dispatcher.register(
-                k[i] as string,
-                states[k[i] as string][1],
-            );
+            context.dispatcher.register(k[i] as string, (value) => {
+                if (!didUnmount) {
+                    states[k[i] as string][1](value);
+                }
+            });
         }
 
         return () => {
+            didUnmount = true;
+
             for (let i = 0; i < k.length; i++) {
                 context.dispatcher.unregister(
                     k[i] as string,
