@@ -5,6 +5,8 @@ react-context-session is designed to minimize the number of rerenders, but still
 With one generic `useSession` hook, and one context provider `<ProvideSession />`, you will be up and ready to go, using your own session data structure.
 The session state dispatcher makes sure that only the requested session data properties will cause the necessary side effects and rerendering.
 
+This library also works with JavaScript projects. [See a more about this in "Getting started".](#getting-started)
+
 ## Install
 
 ```bash
@@ -12,6 +14,8 @@ npm install --save @peteck/react-context-session
 ```
 
 ## Getting started
+
+The example below is written in TypeScript. [See this codesandbox for a JavaScript example.](https://codesandbox.io/s/admiring-rgb-n1xn6)
 
 ```tsx
 import React from "react";
