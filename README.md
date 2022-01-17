@@ -189,4 +189,4 @@ It's not possible to give a changing dependency to the `useSession` hook. The re
 
 ## License
 
-MIT © [Peteck](https://github.com/Peteck)
+MIT © [techbech](https://github.com/techbech)
